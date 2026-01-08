@@ -26,9 +26,9 @@ import User from "@/models/User";
 import { getAuth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-export async function GET(req) {
+export async function GET(request) {
   try {
-    const { userId } = getAuth(req); // ← uses request context automatically
+    const { userId } = getAuth(request); // ← uses request context automatically
 
     if (!userId) {
       return NextResponse.json(
