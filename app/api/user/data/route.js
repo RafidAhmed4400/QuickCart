@@ -26,32 +26,34 @@ import User from "@/models/User";
 import { getAuth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request) {
   try {
-    const { userId, firstName, emailAddress, profileImageUrl } = auth();
+    const { userId } = getAuth(request); // ← uses request context automatically
 
-    if (!userId) {
-      return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
-    }
+    // if (!userId) {
+    //   return NextResponse.json(
+    //     { success: false, message: "Unauthorized" },
+    //     { status: 401 }
+    //   );
+    // }
 
     await connectDB();
 
-    // Look for user in DB
-    let user = await User.findById(userId);
+    const user = await User.findById(userId);
 
     if (!user) {
-      // First time login (Google signup) → create the user
-      user = await User.create({
-        _id: userId,
-        name: firstName || "No Name",
-        email: emailAddress,
-        imageUrl: profileImageUrl || "",
-        cartItems: {},
-      });
+      return NextResponse.json(
+        { success: false, message: "User not found" }
+      );
     }
 
-    return NextResponse.json({ success: true, user });
+    return NextResponse.json({
+      success: true, user
+    });
+
   } catch (error) {
-    return NextResponse.json({ success: false, message: error.message }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: error.message }
+    );
   }
 }
