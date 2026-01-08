@@ -1,33 +1,35 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema({
-    _id : {
-        type: String, 
-        required:true
+const userSchema = new mongoose.Schema(
+  {
+    _id: {
+      type: String,
+      required: true,
     },
-    name : {
-        type: String, 
-        required:true
+    name: {
+      type: String,
+      required: true,
     },
-    email : {
-        type: String, 
-        required:true,
-        unique: true
+    email: {
+      type: String,
+      required: true,
+      unique: true,
     },
-    imageUrl : {
-        type: String, 
-        required:true
+    imageUrl: {
+      type: String,
+      required: true, 
     },
-    cartItems : {
-        type: Object, 
-        default: {}
-    }},
+    cartItems: {
+      type: Object,
+      default: {},
+    },
+  },
+  {
+    minimize: false,
+  }
+);
 
-    {
-        minimize : false
-    }
-)
+// Correct model declaration
+const User = mongoose.models.User || mongoose.model("User", userSchema);
 
-const User = mongoose.Model.user || mongoose.model("user", userSchema)
-
-export default User
+export default User;
