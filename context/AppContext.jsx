@@ -28,10 +28,13 @@ export const AppContextProvider = (props) => {
     }
 
     const fetchUserData = async () => {
+        try{
         if(user.publicMetadata.role === "seller"){
             setIsSeller()
         }
-        setUserData(userDummyData)
+        }catch(error){
+
+        }
     }
 
     const addToCart = async (itemId) => {
@@ -85,8 +88,10 @@ export const AppContextProvider = (props) => {
     }, [])
 
     useEffect(() => {
+        if(user){
         fetchUserData()
-    }, [])
+        }
+    }, [user])
 
     const value = {
         user,
