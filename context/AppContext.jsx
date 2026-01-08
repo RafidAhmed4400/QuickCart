@@ -31,24 +31,33 @@ export const AppContextProvider = (props) => {
     }
 
     const fetchUserData = async () => {
-    try {
-        // Set isSeller to true only if the role is "seller"
-        setIsSeller(user.publicMetadata.role === "seller");
+  try {
+    setIsSeller(user.publicMetadata.role === "seller");
 
-        const token = await getToken()
+    const token = await getToken();
 
-        const {data} = await axios.get('api/users/data', {headers: {Authorization : `Bearer ${token}`}})
-        if(data.success){
-            setUserData(data.user)
-            setCartItems(data.user.cartItems)
-        }else{
-            toast.error(data.message)
-        }
-        // Keep dummy data for now
-    } catch(error) {
-        toast.error(error.message)
+    const { data } = await axios.get('/api/users/data', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (data.success) {
+      setUserData(data.user);
+      setCartItems(data.user.cartItems);
+    } else {
+      toast.error(data.message);
     }
-}
+  } catch (error) {
+    const message =
+      error.response?.data?.message ||
+      error.message ||
+      "Failed to fetch user data";
+
+    toast.error(message);
+  }
+};
+
 
 
     const addToCart = async (itemId) => {
