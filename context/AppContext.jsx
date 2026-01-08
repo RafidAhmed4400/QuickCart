@@ -32,7 +32,9 @@ export const AppContextProvider = (props) => {
 
     const fetchUserData = async () => {
   try {
-    setIsSeller(user.publicMetadata.role === "seller");
+    if(user.publicMetadata.role === "seller"){
+        setIsSeller(true);
+    }
 
     const token = await getToken();
 
@@ -49,12 +51,7 @@ export const AppContextProvider = (props) => {
       toast.error(data.message);
     }
   } catch (error) {
-    const message =
-      error.response?.data?.message ||
-      error.message ||
-      "Failed to fetch user data";
-
-    toast.error(message);
+    toast.error(error.message)
   }
 };
 
