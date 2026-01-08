@@ -30,34 +30,30 @@ export async function GET(request) {
   try {
     const { userId } = getAuth(request); // ← uses request context automatically
 
-    if (!userId) {
-      return NextResponse.json(
-        { success: false, message: "Unauthorized" },
-        { status: 401 }
-      );
-    }
+    // if (!userId) {
+    //   return NextResponse.json(
+    //     { success: false, message: "Unauthorized" },
+    //     { status: 401 }
+    //   );
+    // }
 
     await connectDB();
 
-    const user = await User.findOne({ clerkId: userId });
+    const user = await User.findById(userId);
 
     if (!user) {
       return NextResponse.json(
-        { success: false, message: "User not found" },
-        { status: 404 }
+        { success: false, message: "User not found" }
       );
     }
 
     return NextResponse.json({
-      success: true,
-      message: "User found",
-      data: user,
+      success: true, user
     });
 
   } catch (error) {
     return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 500 }
+      { success: false, message: error.message }
     );
   }
 }
