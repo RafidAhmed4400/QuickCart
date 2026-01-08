@@ -32,6 +32,8 @@ export const AppContextProvider = (props) => {
         if(user.publicMetadata.role === "seller"){
             setIsSeller()
         }
+        setUserData(userDummyData)
+
         }catch(error){
 
         }
