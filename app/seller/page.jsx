@@ -17,42 +17,50 @@ const AddProduct = () => {
   const [offerPrice, setOfferPrice] = useState('');
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const formData = new FormData()
-    formData.append('name', name)
-    formData.append('description', description)
-    formData.append('category', category)
-    formData.append('price', price)
-    formData.append('offerPrice', offerPrice)
+  try {
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('description', description);
+    formData.append('category', category);
+    formData.append('price', price);
+    formData.append('offerPrice', offerPrice);
 
-    for(let i = 0; i<files.length; i++){
-      formData.append('images', files[i])
-    }
+    files.forEach(file => {
+      if (file) formData.append('images', file);
+    });
 
-    try {
-      const token = await getToken()
+    const token = await getToken();
 
-      const {data} = await axios.post('/api/product/add', formData, {headers: {Authorization : `Bearer ${token}` }})
-
-      if(data.success){
-        toast.success(data.message)
-        setFiles([]);
-        setName('');
-        setDescription('');
-        setCategory('Earphone');
-        setPrice('');
-        setOfferPrice('');
-      }else{
-        toast.error(data.message)
+    const { data } = await axios.post(
+      '/api/product/add',
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
+    );
 
-    } catch (error) {
-      toast.error(error.message)
+    if (data.success) {
+      toast.success(data.message);
+      setFiles([]);
+      setName('');
+      setDescription('');
+      setCategory('Earphone');
+      setPrice('');
+      setOfferPrice('');
+    } else {
+      toast.error(data.message);
     }
 
+  } catch (error) {
+    console.error(error);
+    toast.error(error?.response?.data?.message || error.message);
+  }
+};
 
-  };
 
   return (
     <div className="flex-1 min-h-screen flex flex-col justify-between">
