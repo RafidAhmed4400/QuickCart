@@ -38,6 +38,7 @@ QuickCart is a full-stack e-commerce web application built with Next.js that sup
   - Seller order listings
 - MongoDB for database storage
 - Cloudinary for image upload and media management
+- Vercel for deployment
 
 ---
 
@@ -58,6 +59,7 @@ QuickCart is a full-stack e-commerce web application built with Next.js that sup
   - Axios
   - Node.js
   - Environment variables via `.env`
+  - vercel
 
 ---
 
